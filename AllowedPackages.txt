@@ -4,6 +4,7 @@ java/math
 java/util
 java/util/regex
 battlecode/common
+battlecode/engine/instrumenter/lang
 scala
 scala/collection
 scala/collection/generic

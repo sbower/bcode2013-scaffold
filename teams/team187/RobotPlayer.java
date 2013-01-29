@@ -1,7 +1,8 @@
-package examplefuncsplayer;
+package team187;
 
 import battlecode.common.Direction;
 import battlecode.common.GameConstants;
+import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import battlecode.common.RobotType;
 import battlecode.engine.instrumenter.lang.System;
@@ -20,21 +21,37 @@ public class RobotPlayer {
 						Direction dir = rc.getLocation().directionTo(rc.senseEnemyHQLocation());
 						if (rc.canMove(dir))
 							rc.spawn(dir);
+							System.out.println("hello");
 					}
 				} else if (rc.getType() == RobotType.SOLDIER) {
 					if (rc.isActive()) {
-						if (Math.random()<0.005) {
-							// Lay a mine 
-							if(rc.senseMine(rc.getLocation())==null)
-								rc.layMine();
-						} else { 
-							// Choose a random direction, and move that way if possible
-							Direction dir = Direction.values()[(int)(Math.random()*8)];
-							if(rc.canMove(dir)) {
+						
+						MapLocation[] m = rc.senseMineLocations(rc.getLocation(), 2, null); 
+						if(m.length > 0) {
+							int pos = (int) (Math.random() * m.length);
+							rc.defuseMine(m[pos]);
+						} else {
+							Direction dir = rc.getLocation().directionTo(rc.senseEnemyHQLocation());
+							if (rc.canMove(dir)) {
 								rc.move(dir);
-								rc.setIndicatorString(0, "Last direction moved: "+dir.toString());
+							} else {
+								rc.move(Direction.NORTH);
 							}
+							  
+							
 						}
+//						if (Math.random()<0.005) {
+//							// Lay a mine 
+//							if(rc.senseMine(rc.getLocation())==null)
+//								rc.layMine();
+//						} else { 
+//							// Choose a random direction, and move that way if possible
+//							Direction dir = Direction.values()[(int)(Math.random()*8)];
+//							if(rc.canMove(dir)) {
+//								rc.move(dir);
+//								rc.setIndicatorString(0, "Last direction moved: "+dir.toString());
+//							}
+//						}
 					}
 					
 					if (Math.random()<0.01 && rc.getTeamPower()>5) {
